@@ -73,7 +73,7 @@
     <nuxt-link
       block
       class="flex items-center justify-between bg-dark px-4 py-6 cursor-pointer"
-      to="/withdraw/to-available"
+      to="/withdraw/swap-account"
     >
       <span class="text-light/80"> Available to spend </span>
 

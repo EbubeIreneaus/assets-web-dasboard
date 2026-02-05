@@ -16,6 +16,18 @@ const nextOfKin = ref<{
   country: string;
 } | null>(null);
 
+const see_less = ref(true);
+
+const policyText = `In the event that an account remains inactive for a continuous period of six (6) months and the account holder does not respond to official communications from the company, the account will be classified as inactive. Where inactivity persists, the company may initiate a welfare verification process by contacting the registered Next of Kin solely to confirm the status of the account holder. Upon submission and verification of legally recognized documentation, including but not limited to a valid death certificate and proof of relationship, the company will proceed in accordance with applicable laws and internal compliance policies to transfer the eligible digital assets to the duly verified Next of Kin. All transfers are subject to regulatory review, identity verification, and final approval by the company to ensure the security and lawful distribution of assets.`;
+
+
+const displayedPolicyText = computed(() => {
+  if (see_less.value) {
+    return policyText.substring(0, 300) + "...";
+  }
+  return policyText;
+});
+
 async function fetchNextOfKin() {
   isLoading.value = true;
   try {
@@ -88,17 +100,34 @@ onMounted(() => {
     <PageTop title="Next of Kin" />
 
     <!-- Legal Warning/Info Message -->
+    <!-- Legal Warning/Info Message -->
     <div class="bg-dark rounded-xl p-4 flex gap-4 items-start">
       <UIcon
         name="i-heroicons-information-circle"
-        class="w-6 h-6 text-blue-500 flex-shrink-0 mt-0.5"
+        class="w-6 h-6 text-blue-500 shrink-0 mt-0.5"
       />
-      <p class="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
-        If For six months, you have been inactive on your account and failed to
-        respond to messages from the company, your Next of Kin is to be contcted
-        as to your way about, and with proper Death Certificate and Evidence All
-        assets would be immediately transsfered to our next of kin
-      </p>
+      <div>
+        <p class="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+          <b>Next of Kin & Account Inactivity Policy</b><br />
+          {{ displayedPolicyText }}
+          <u-button
+            label="see less"
+            v-if="!see_less"
+            @click="see_less = true"
+            variant="link"
+            color="neutral"
+            class="inline-block p-0 align-baseline"
+          />
+          <u-button
+            label="see more"
+            v-else
+            @click="see_less = false"
+            variant="link"
+            color="neutral"
+            class="inline-block p-0 align-baseline"
+          />
+        </p>
+      </div>
     </div>
 
     <!-- Loading State -->

@@ -9,9 +9,13 @@ const authToken = useCookie("authToken");
 const balance = ref(1500.0);
 const amount = ref<number | null>(null);
 const destination = ref("available");
+const source = ref("balance")
 const loading = ref(false);
 
-const destinations = [{ label: "Available Balance", value: "available" }];
+const wallets = [
+  { label: "Available Balance", value: "available" },
+  { label: "Balance", value: "balance" },
+];
 
 const quickAmounts = [100, 200, 500, 1000, 2000, 5000, 10000];
 
@@ -29,7 +33,7 @@ const handleWithdraw = async () => {
 
   try {
     const res: any = await $fetch(
-      `${runtimeConfig.public.apiURL}/api/transaction/withdrawal/to-balance`,
+      `${runtimeConfig.public.apiURL}/api/transaction/withdrawal/to-wallet`,
       {
         method: "POST",
         headers: {
@@ -37,6 +41,8 @@ const handleWithdraw = async () => {
         },
         body: {
           amount: amount.value,
+          source: source.value,
+          destination: destination.value
         },
       },
     );
@@ -74,9 +80,15 @@ const handleWithdraw = async () => {
     <PageTop title="Balance to Available" />
 
     <!-- Balance Card -->
-    <div class="rounded-xl bg-dark p-5 space-y-2">
-      <p class="text-sm opacity-70">Balance</p>
-      <p class="text-3xl font-bold">${{ balance.toFixed(2) }}</p>
+    <div class="space-y-2">
+      <p class="text-sm text-primary">Send From</p>
+
+      <USelect
+        v-model="source"
+        :items="wallets"
+        size="xl"
+        class="max-w-xl w-full"
+      />
     </div>
 
     <!-- Destination -->
@@ -85,7 +97,7 @@ const handleWithdraw = async () => {
 
       <USelect
         v-model="destination"
-        :options="destinations"
+        :items="wallets"
         size="xl"
         class="max-w-xl w-full"
       />

@@ -16,7 +16,7 @@
       <header class="p-4 lg:hidden">
         <button @click="toggleSidebar">☰</button>
       </header>
-      <main class="p-4">
+      <main class="p-4 mb-20 lg:mb-0">
         <slot />
       </main>
     </div>

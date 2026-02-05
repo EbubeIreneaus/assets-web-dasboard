@@ -8,12 +8,13 @@ const runtimeConfig = useRuntimeConfig();
 const authToken = useCookie("authToken");
 const toast = useToast();
 
+const channelId = ref<number | null>(null);
 const paymentOptions = ref<any[]>([]);
-const selectedMethod = ref<number | null>(null);
+const selectedMethod = ref<string | null>(null);
 const amount = ref<number | null>(null);
 
 const selectedOption = computed(() =>
-  paymentOptions.value.find((o) => o.id === selectedMethod.value),
+  paymentOptions.value.find((o) => o.name === selectedMethod.value),
 );
 
 const fetchChannels = async () => {
@@ -69,7 +70,7 @@ const handleDeposit = async () => {
     );
 
     if (res.success) {
-      router.push(`/deposit/${res.id}?channelId=${selectedMethod.value}`);
+      router.push(`/deposit/${res.id}?channelId=${channelId.value}`);
     } else {
       toast.add({
         title: "Error",
@@ -128,8 +129,8 @@ onMounted(() => {
           v-for="option in paymentOptions"
           :key="option.id"
           class="flex items-center justify-between px-4 py-6 rounded-md bg-dark cursor-pointer border border-transparent hover:border-primary/50 transition-colors"
-          :class="{ '!border-primary': selectedMethod === option.id }"
-          @click="selectedMethod = option.id"
+          :class="{ 'border-primary!': selectedMethod === option.name }"
+          @click="() => {selectedMethod = option.name; channelId = option.id}"
         >
           <div class="flex flex-col">
             <span class="text-sm font-medium">
@@ -143,7 +144,7 @@ onMounted(() => {
           <UIcon
             name="i-heroicons-check-circle"
             class="text-green-500 w-6 h-6"
-            v-if="selectedMethod === option.id"
+            v-if="selectedMethod === option.name"
           />
         </div>
       </div>

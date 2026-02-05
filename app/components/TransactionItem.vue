@@ -6,7 +6,7 @@ interface Transaction {
   type: "deposit" | "withdraw";
   amount: string | number; // Formatting handled by parent or string format
   createdAt: string;
-  status: "pending" | "success" | "successful" | "failed";
+  status: "pending" | "successful" | "failed";
   label: string;
 }
 
@@ -16,7 +16,6 @@ const props = defineProps<{
 
 const statusColor = computed(() => {
   switch (props.transaction.status) {
-    case "success":
     case "successful":
       return "text-green-500 bg-green-50 dark:bg-green-900/20";
     case "failed":
@@ -36,13 +35,13 @@ const statusLabel = computed(() => {
 });
 
 const iconName = computed(() => {
-  return props.transaction.type === "deposit"
+  return props.transaction.type !== "withdraw"
     ? "i-heroicons-arrow-down-left"
     : "i-heroicons-arrow-up-right";
 });
 
 const iconColor = computed(() => {
-  return props.transaction.type === "deposit"
+  return props.transaction.type !== "withdraw"
     ? "text-green-500"
     : "text-red-500";
 });
@@ -82,7 +81,7 @@ const iconColor = computed(() => {
             : ''
         "
       >
-        {{ transaction.type === "deposit" ? "+" : "-" }}{{ transaction.amount }}
+        {{ transaction.type != "withdraw" ? "+" : "-" }}{{ transaction.amount }}
       </p>
       <span
         class="inline-block px-2 py-0.5 rounded text-xs font-medium mt-1"
