@@ -17,7 +17,7 @@
         </h2>
       </div>
 
-      <UButton icon="i-heroicons-headset" variant="ghost" color="lightText" />
+      <UButton to="/contact" icon="mdi:headset" variant="subtle" color="neutral" />
     </div>
 
     <!-- Balance Card -->

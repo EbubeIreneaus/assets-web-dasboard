@@ -35,15 +35,21 @@ const statusLabel = computed(() => {
 });
 
 const iconName = computed(() => {
-  return props.transaction.type !== "withdraw"
-    ? "i-heroicons-arrow-down-left"
-    : "i-heroicons-arrow-up-right";
+  return (props.transaction.type === "withdraw" || props.transaction.label.startsWith("transfer") )
+    ? "i-heroicons-arrow-up-right"
+    : props.transaction.type === "deposit"
+      ? "i-heroicons-arrow-down-left"
+      : "mdi:cash-100";
 });
 
 const iconColor = computed(() => {
-  return props.transaction.type !== "withdraw"
-    ? "text-green-500"
-    : "text-red-500";
+  return props.transaction.type === "withdraw"
+    ? "text-red-500"
+    : props.transaction.type === "deposit"
+      ? "text-green-500"
+      : (props.transaction.label.startsWith("purchase")|| props.transaction.label.startsWith("Return"))
+        ? "text-green-500"
+        : "text-red-500";
 });
 </script>
 
