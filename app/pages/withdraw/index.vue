@@ -14,6 +14,7 @@ const availableBalance = ref(0.0);
 const withdrawalMethod = ref("bitcoin");
 const walletAddress = ref("");
 const amount = ref<number | null>(null);
+const password = ref("");
 const loading = ref(false);
 
 const methods = [
@@ -82,6 +83,15 @@ const handleWithdraw = async () => {
     return;
   }
 
+  if (!password.value) {
+    toast.add({
+      title: "Error",
+      description: "Please enter your password",
+      color: "error",
+    });
+    return;
+  }
+
   loading.value = true;
 
   try {
@@ -96,6 +106,7 @@ const handleWithdraw = async () => {
           amount: amount.value,
           channel: withdrawalMethod.value,
           wallet_address: walletAddress.value,
+          password: password.value,
         },
       },
     );
@@ -164,6 +175,7 @@ onMounted(() => {
       variant="soft"
     />
 
+
     <!-- Amount -->
     <div class="space-y-2">
       <p class="text-sm text-textLight">Amount to Withdraw</p>
@@ -181,6 +193,17 @@ onMounted(() => {
     <!-- Quick Amounts -->
     <QuickAmountGrid v-model="amount" :amounts="quickAmounts" />
 
+      <!-- Password -->
+    <u-form-field label="Password" required>
+      <u-input
+        v-model="password"
+        type="password"
+        size="xl"
+        placeholder="Password"
+        class="max-w-xl w-full"
+        variant="soft"
+      />
+    </u-form-field>
     <!-- Action -->
     <UButton
       size="xl"
