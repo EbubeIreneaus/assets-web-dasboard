@@ -21,6 +21,7 @@ const searchResult = ref<{
 // Step 2 Data
 const amount = ref<number | null>(null);
 const selectedSource = ref<"balance" | "available_balance">("balance");
+const password = ref("");
 
 // Balances
 const balances = ref({
@@ -51,7 +52,7 @@ async function checkUser() {
         name: data.data.fullname,
         email: data.data.email,
         avatar: runtimeConfig.public.apiURL + data.data.image || "/profile.png",
-        active: data.data.active
+        active: data.data.active,
       };
 
       // Update balances from the response (sender's balances)
@@ -95,6 +96,16 @@ async function performTransfer() {
     return;
   }
 
+  if (!password.value) {
+    toast.add({
+      title: "Error",
+      description: "Please enter your password",
+      color: "error",
+      icon: "i-heroicons-x-circle",
+    });
+    return;
+  }
+
   isLoading.value = true;
 
   try {
@@ -102,6 +113,7 @@ async function performTransfer() {
       amount: amount.value,
       source: selectedSource.value,
       to: email.value,
+      password: password.value,
     };
 
     const res: any = await $fetch(
@@ -209,15 +221,13 @@ async function performTransfer() {
             class="text-xs font-medium text-green-500 flex items-center gap-1 mt-1"
             v-if="searchResult.active"
           >
-            <UIcon name="i-heroicons-check-badge" class="w-3 h-3" /> Active
-            User
+            <UIcon name="i-heroicons-check-badge" class="w-3 h-3" /> Active User
           </span>
           <span
             class="text-xs font-medium text-red-500 flex items-center gap-1 mt-1"
             v-else
           >
-            <UIcon name="i-heroicons-x-badge" class="w-3 h-3" /> Inactive
-            User
+            <UIcon name="i-heroicons-x-badge" class="w-3 h-3" /> Inactive User
           </span>
         </div>
       </div>
@@ -367,6 +377,18 @@ async function performTransfer() {
           :amounts="[50, 100, 200, 500, 1000, 5000]"
         />
       </div>
+
+      <!-- Password -->
+      <u-form-field label="Password" required>
+        <u-input
+          v-model="password"
+          type="password"
+          size="xl"
+          placeholder="Password"
+          class="max-w-xl w-full"
+          variant="soft"
+        />
+      </u-form-field>
 
       <!-- Action Buttons -->
       <div class="flex gap-4 pt-4">

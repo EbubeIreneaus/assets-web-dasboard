@@ -9,6 +9,7 @@ const authToken = useCookie("authToken");
 const fromPlan = ref("");
 const toPlan = ref("");
 const amount = ref<number | null>(null);
+const password = ref("");
 const loading = ref(false);
 const fetching = ref(false);
 
@@ -98,6 +99,16 @@ const handleConvert = async () => {
     return;
   }
 
+  if (!password.value) {
+    toast.add({
+      title: "Error",
+      description: "Please enter your password",
+      color: "error",
+      icon: "i-heroicons-x-circle",
+    });
+    return;
+  }
+
   loading.value = true;
 
   try {
@@ -112,6 +123,7 @@ const handleConvert = async () => {
           source: fromPlan.value,
           amount: amount.value,
           destination: toPlan.value,
+          password: password.value,
         },
       },
     );
@@ -190,6 +202,18 @@ onMounted(() => {
 
     <!-- Quick Amount Grid -->
     <QuickAmountGrid v-model="amount" :amounts="quickAmounts" />
+
+    <!-- Password -->
+    <u-form-field label="Password" required>
+      <u-input
+        v-model="password"
+        type="password"
+        size="xl"
+        placeholder="Password"
+        class="max-w-xl w-full"
+        variant="soft"
+      />
+    </u-form-field>
 
     <!-- Action -->
     <UButton

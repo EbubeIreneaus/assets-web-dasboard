@@ -17,6 +17,7 @@ const plan = ref({
 
 const balance = ref(0);
 const amount = ref<number | null>(null);
+const password = ref("");
 const submitting = ref(false);
 const fetching = ref(false);
 
@@ -68,6 +69,16 @@ const handleBuy = async () => {
     return;
   }
 
+  if (!password.value) {
+    toast.add({
+      title: "Error",
+      description: "Please enter your password",
+      color: "error",
+      icon: "i-heroicons-x-circle",
+    });
+    return;
+  }
+
   submitting.value = true;
 
   try {
@@ -81,6 +92,7 @@ const handleBuy = async () => {
         body: {
           planName: planId,
           amount: amount.value,
+          password: password.value,
         },
       },
     );
@@ -174,6 +186,18 @@ onMounted(() => {
         <u-icon v-else name="mdi:xmark" class="text-red-500" />
       </div>
     </div>
+
+    <!-- Password -->
+    <u-form-field label="Password" required>
+      <u-input
+        v-model="password"
+        type="password"
+        size="xl"
+        placeholder="Password"
+        class="max-w-xl w-full"
+        variant="soft"
+      />
+    </u-form-field>
 
     <!-- Action -->
     <UButton size="xl" class="mt-6" :loading="submitting" @click="handleBuy">

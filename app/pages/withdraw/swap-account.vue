@@ -8,8 +8,9 @@ const authToken = useCookie("authToken");
 
 const balance = ref(1500.0);
 const amount = ref<number | null>(null);
+const password = ref("");
 const destination = ref("available");
-const source = ref("balance")
+const source = ref("balance");
 const loading = ref(false);
 
 const wallets = [
@@ -29,6 +30,16 @@ const handleWithdraw = async () => {
     return;
   }
 
+  if (!password.value) {
+    toast.add({
+      title: "Error",
+      description: "Please enter your password",
+      color: "error",
+      icon: "i-heroicons-x-circle",
+    });
+    return;
+  }
+
   loading.value = true;
 
   try {
@@ -42,7 +53,8 @@ const handleWithdraw = async () => {
         body: {
           amount: amount.value,
           source: source.value,
-          destination: destination.value
+          destination: destination.value,
+          password: password.value,
         },
       },
     );
@@ -118,6 +130,18 @@ const handleWithdraw = async () => {
 
     <!-- Quick Amount Grid -->
     <QuickAmountGrid v-model="amount" :amounts="quickAmounts" />
+
+    <!-- Password -->
+    <u-form-field label="Password" required>
+      <u-input
+        v-model="password"
+        type="password"
+        size="xl"
+        placeholder="Password"
+        class="max-w-xl w-full"
+        variant="soft"
+      />
+    </u-form-field>
 
     <!-- Action -->
     <UButton
