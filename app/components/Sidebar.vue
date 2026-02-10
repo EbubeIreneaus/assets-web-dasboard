@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6">
+  <div class="space-y-6 pb-20">
     <!-- Profile Section -->
     <div class="text-center">
       <div class="relative inline-block">
@@ -163,13 +163,13 @@ const securityLinks = [
   {
     to: "/auth/signout",
     text: "Sign Out",
-    icon: "mdi:facebook",
+    icon: "mdi:logout",
     color: "warning",
   },
   {
     to: "/account/delete-account",
     text: "Delete Account",
-    icon: "mdi:facebook",
+    icon: "mdi:trash",
     color: "error",
   },
 ];

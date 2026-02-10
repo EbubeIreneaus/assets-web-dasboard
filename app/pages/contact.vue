@@ -16,29 +16,24 @@ const contactInfo = ref([
   {
     icon: "i-heroicons-envelope",
     label: "Email",
-    value: "support@digitalassetsweb.com", // Keeping as default/placeholder or could be from API if available
-    href: "mailto:support@digitalassetsweb.com",
+    value: "service@digitalassetsweb.com", // Keeping as default/placeholder or could be from API if available
+    href: "mailto:service@digitalassetsweb.com",
   },
   {
     icon: "i-heroicons-phone",
     label: "Phone",
     value: "", // Will be updated from API
-    href: "",
+    href: "#",
   },
 ]);
 
 const socialLinks = ref([
+
   {
-    icon: "mdi:facebook",
-    color: "text-blue-600",
-    href: "#",
-    label: "Facebook",
-  },
-  {
-    icon: "mdi:twitter", // Changed from mdi:whatsapp as per API response (twitter_url)
+    icon: "mdi:whatsapp", // Changed from mdi:whatsapp as per API response (twitter_url)
     color: "text-blue-400",
     href: "#",
-    label: "Twitter",
+    label: "Whatsapp",
   },
   {
     icon: "mdi:telegram",
@@ -55,41 +50,9 @@ const fetchSupportDetails = async () => {
     );
 
     if (res.success && res.data) {
-      // Update Phone
-      if (res.data.phone) {
-        const phoneIndex = contactInfo.value.findIndex(
-          (c) => c.label === "Phone",
-        );
-        if (phoneIndex !== -1 && contactInfo.value[phoneIndex]) {
-          contactInfo.value[phoneIndex].value = res.data.phone;
-          contactInfo.value[phoneIndex].href = `tel:${res.data.phone}`;
-        }
-      }
-
-      // Update Social Links
-      if (res.data.facebook_url) {
-        const fbIndex = socialLinks.value.findIndex(
-          (s) => s.label === "Facebook",
-        );
-        if (fbIndex !== -1 && socialLinks.value[fbIndex])
-          socialLinks.value[fbIndex].href = res.data.facebook_url;
-      }
-
-      if (res.data.twitter_url) {
-        const twitterIndex = socialLinks.value.findIndex(
-          (s) => s.label === "Twitter",
-        );
-        if (twitterIndex !== -1 && socialLinks.value[twitterIndex])
-          socialLinks.value[twitterIndex].href = res.data.twitter_url;
-      }
-
-      if (res.data.telegram_url) {
-        const tgIndex = socialLinks.value.findIndex(
-          (s) => s.label === "Telegram",
-        );
-        if (tgIndex !== -1 && socialLinks.value[tgIndex])
-          socialLinks.value[tgIndex].href = res.data.telegram_url;
-      }
+      socialLinks.value[0].href = `https://wa.me/${res.data.phone}`;
+      socialLinks.value[1].href = res.data.telegram_url
+      contactInfo.value[1].value = res.data.phone
     }
   } catch (error) {
     toast.add({
